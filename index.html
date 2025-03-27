@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Declaração de Amor</title>
+
+    <!-- Adicionando biblioteca QR Code -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            font-family: 'Arial', sans-serif;
+
+        }
+
+        
+
+        body {
+
+            background-color: rgb(0, 0, 0);
+
+            color: white;
+
+            overflow: hidden;
+
+            position: relative;
+
+            height: 100vh;
+
+            width: 100vw;
+
+        }
+
+        
+
+        .page {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 20px;
+
+            opacity: 0;
+
+            transition: opacity 1s ease;
+
+            z-index: 1;
+
+            overflow-y: auto;
+
+        }
+
+        
+
+        .active {
+
+            opacity: 1;
+
+            z-index: 10;
+
+        }
+
+        
+
+        .stars {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            z-index: 0;
+
+        }
+
+        
+
+        .star {
+
+            position: absolute;
+
+            background-color: white;
+
+            border-radius: 50%;
+
+        }
+
+        
+
+        .heart {
+
+            position: absolute;
+
+            color: rgb(248, 9, 9);
+
+            font-size: 30px;
+
+            animation: float 10s infinite ease-in-out;
+
+            z-index: 0;
+
+        }
+
+        
+
+        @keyframes float {
+
+            0%, 100% {
+
+                transform: translateY(0) rotate(0deg);
+
+            }
+
+            50% {
+
+                transform: translateY(-20px) rotate(10deg);
+
+            }
+
+        }
+
+        
+
+        h1 {
+
+            font-size: 1.0rem;
+
+            margin-bottom: 30px;
+
+            color: #ffffff;
+
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+
+        }
+
+        
+
+        h2 {
+
+            font-size: 1.5rem;
+
+            margin-bottom: 20px;
+
+            color: #ffffff;
+
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+
+        }
+
+        
+
+        p {
+
+            font-size: 1.2rem;
+
+            margin-bottom: 20px;
+
+            max-width: 600px;
+
+            line-height: 1.6;
+
+        }
+
+        
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 12px 24px;
+
+            background: linear-gradient(45deg, #ffffff, #ffffff);
+
+            color: rgb(0, 0, 0);
+
+            border: none;
+
+            border-radius: 25px;
+
+            font-size: 0.8rem;
+
+            cursor: pointer;
+
+            margin: 10px;
+
+            text-decoration: none;
+
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+
+            transition: all 0.3s ease;
+
+        }
+
+        
+
+        .btn:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
+
+        }
+
+        
+
+        .photo-container {
+
+            width: 280px;
+
+            height: 280px;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            margin: 20px 0;
+
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+
+            position: relative;
+
+        }
+
+        
+
+        @media (min-width: 768px) {
+
+            .photo-container {
+
+                width: 300px;
+
+                height: 300px;
+
+            }
+
+        }
+
+        
+
+        .photo-container img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        
+
+        .file-upload {
+
+            position: absolute;
+
+            bottom: 10px;
+
+            right: 10px;
+
+            background: rgba(0, 0, 0, 0.6);
+
+            border-radius: 50%;
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            z-index: 2;
+
+        }
+
+        
+
+        .file-upload input {
+
+            display: none;
+
+        }
+
+        
+
+        .file-upload-icon {
+
+            color: white;
+
+            font-size: 20px;
+
+        }
+
+        
+
+        .options {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            margin-top: 20px;
+
+        }
+
+        
+
+        .timer {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            margin: 30px 0;
+
+        }
+
+        
+
+        .timer div {
+
+            margin: 10px 0;
+
+            font-size: 1.3rem;
+
+            color: #ff69b4;
+
+        }
+
+        
+
+        .spotify-embed {
+
+            width: 280px;
+
+            height: 80px;
+
+            margin: 20px 0;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+
+        }
+
+        
+
+        .heart-animation-container {
+
+            width: 100%;
+
+            height: 300px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin: 20px 0;
+
+        }
+
+        
+
+        @media (min-width: 768px) {
+
+            .heart-animation-container {
+
+                height: 400px;
+
+            }
+
+        }
+
+        
+
+        .heart-animation-iframe {
+
+            width: 100%;
+
+            height: 100%;
+
+            border: none;
+
+            border-radius: 15px;
+
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.7);
+
+        }
+
+        
+
+        .meteor {
+
+            position: absolute;
+
+            width: 2px;
+
+            height: 2px;
+
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);
+
+            animation: meteor linear;
+
+            top: 0;
+
+            z-index: 0;
+
+        }
+
+        
+
+        @keyframes meteor {
+
+            0% {
+
+                transform: translateX(0) translateY(0);
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                transform: translateX(-500px) translateY(500px);
+
+                opacity: 0;
+
+            }
+
+        }
+
+        
+
+        .settings-panel {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            bottom: 0;
+
+            background: rgba(0, 0, 0, 0.95);
+
+            padding: 20px;
+
+            z-index: 100;
+
+            display: none;
+
+            overflow-y: auto;
+
+        }
+
+        
+
+        .settings-toggle {
+
+            position: fixed;
+
+            top: 10px;
+
+            right: 10px;
+
+            background: rgba(255, 105, 180, 0.7);
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            z-index: 101;
+
+            font-size: 20px;
+
+            color: white;
+
+        }
+
+        
+
+        .settings-content {
+
+            max-width: 500px;
+
+            margin: 0 auto;
+
+            padding-top: 50px;
+
+        }
+
+        
+
+        .settings-close {
+
+            position: absolute;
+
+            top: 10px;
+
+            right: 10px;
+
+            background: rgba(255, 105, 180, 0.7);
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            color: white;
+
+        }
+
+        
+
+        .spotify-input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            border-radius: 5px;
+
+            border: 1px solid #ff69b4;
+
+            background: rgba(0, 0, 0, 0.8);
+
+            color: white;
+
+            font-size: 16px;
+
+        }
+
+        
+
+        .date-input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            border-radius: 5px;
+
+            border: 1px solid #ff69b4;
+
+            background: rgba(0, 0, 0, 0.8);
+
+            color: white;
+
+            font-size: 16px;
+
+        }
+
+        
+
+        #python-heart {
+
+            width: 100%;
+
+            height: 100%;
+
+            border: none;
+
+            border-radius: 15px;
+
+            box-shadow: none;
+
+        }
+
+        
+
+        .settings-section {
+
+            margin-bottom: 25px;
+
+        }
+
+        
+
+        .settings-section h3 {
+
+            margin-bottom: 15px;
+
+            color: #ff69b4;
+
+        }
+
+        
+
+        .file-input-container {
+
+            position: relative;
+
+            margin-bottom: 15px;
+
+        }
+
+        
+
+        .file-input-label {
+
+            display: block;
+
+            padding: 12px;
+
+            background: rgba(255, 105, 180, 0.3);
+
+            border: 1px solid #ff69b4;
+
+            border-radius: 5px;
+
+            color: white;
+
+            text-align: center;
+
+            cursor: pointer;
+
+        }
+
+        
+
+        .file-input {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            opacity: 0;
+
+            cursor: pointer;
+
+        }
+
+        
+
+        .preview-container {
+
+            width: 100%;
+
+            height: 150px;
+
+            margin-top: 10px;
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            background: #111;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+        
+
+        .preview-container img {
+
+            max-width: 100%;
+
+            max-height: 100%;
+
+            object-fit: contain;
+
+        }
+
+        /* Estilos para o QR Code */
+        .qr-code-container {
+            margin: 20px auto;
+            text-align: center;
+            display: none;
+        }
+        
+        #qrcode {
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .export-import-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .share-link-container {
+            margin-top: 15px;
+        }
+        
+        #share-url {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Estrelas de fundo -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Botão de configurações -->
+    <div class="settings-toggle" onclick="toggleSettings()">⚙️</div>
+
+    <!-- Painel de configurações -->
+    <div class="settings-panel" id="settings-panel">
+        <div class="settings-close" onclick="toggleSettings()">✕</div>
+        <div class="settings-content">
+            <h2 style="margin-bottom: 20px; color: #fdfdfd;">Configurações</h2>
+            
+            <div class="settings-section">
+                <h3>Música</h3>
+                <label for="spotify-url" style="display: block; margin-bottom: 8px;">URL do Spotify:</label>
+                <input type="text" id="spotify-url" class="spotify-input" placeholder="https://open.spotify.com/embed/track/ID_DA_MUSICA">
+            </div>
+            
+            <div class="settings-section">
+                <h3>Data do Relacionamento</h3>
+                <label for="relationship-date" style="display: block; margin-bottom: 8px;">Data de início do namoro:</label>
+                <input type="date" id="relationship-date" class="date-input">
+            </div>
+            
+            <div class="settings-section">
+                <h3>Sua Declaração</h3>
+                <label for="declaration-text" style="display: block; margin-bottom: 8px;">Mensagem de amor:</label>
+                <textarea id="declaration-text" class="spotify-input" style="height: 120px; resize: none;" placeholder="Digite sua declaração de amor aqui..."></textarea>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Fotos</h3>
+                
+                <div class="file-input-container">
+                    <label for="photo1-upload" class="file-input-label">Selecionar Foto 1</label>
+                    <input type="file" id="photo1-upload" class="file-input" accept="image/*" onchange="previewImage(this, 'preview1'); loadAndSaveImage(this, 'character-photo1')">
+                    <div class="preview-container">
+                        <img id="preview1" src="" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="file-input-container">
+                    <label for="photo2-upload" class="file-input-label">Selecionar Foto do Casal</label>
+                    <input type="file" id="photo2-upload" class="file-input" accept="image/*" onchange="previewImage(this, 'preview2'); loadAndSaveImage(this, 'couple-photo')">
+                    <div class="preview-container">
+                        <img id="preview2" src="" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="file-input-container">
+                    <label for="photo3-upload" class="file-input-label">Selecionar Foto 3</label>
+                    <input type="file" id="photo3-upload" class="file-input" accept="image/*" onchange="previewImage(this, 'preview3'); loadAndSaveImage(this, 'character-photo2')">
+                    <div class="preview-container">
+                        <img id="preview3" src="" alt="Preview">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção de exportar/importar configurações -->
+            <div class="settings-section">
+                <h3>Salvar e Compartilhar</h3>
+                
+                <div class="export-import-container">
+                    <button class="btn" style="width: 100%;" onclick="exportSettings()">Exportar Configurações</button>
+                    
+                    <div class="file-input-container">
+                        <label for="import-settings" class="file-input-label">Importar Configurações</label>
+                        <input type="file" id="import-settings" class="file-input" accept=".json" onchange="importSettings(this)">
+                    </div>
+                </div>
+                
+                <button class="btn" style="width: 100%;" onclick="generateQRCode()">Gerar QR Code</button>
+                
+                <div class="qr-code-container" id="qr-code-container">
+                    <div id="qrcode"></div>
+                    <p style="margin-top: 10px; font-size: 0.8rem;">Escaneie este QR Code para compartilhar suas configurações</p>
+                </div>
+                
+                <div class="share-link-container">
+                    <label for="share-url" style="display: block; margin-bottom: 8px;">Link para compartilhar:</label>
+                    <input type="text" id="share-url" readonly>
+                    <button class="btn" style="width: 100%;" onclick="copyShareLink()">Copiar Link</button>
+                </div>
+            </div>
+            
+            <button class="btn" style="width: 100%; margin: 20px 0;" onclick="saveSettings()">Salvar Configurações</button>
+        </div>
+    </div>
+
+    <!-- Página 1 -->
+    <div class="page active" id="page1">
+        <h1>Você é muito especial pra mim, por isso fiz essa surpresa:</h1>
+        <button class="btn" onclick="showPage(2)">Clique aqui para continuar</button>
+    </div>
+
+    <!-- Página 2 -->
+    <div class="page" id="page2">
+        <div class="photo-container">
+            <img id="character-photo1" src="https://via.placeholder.com/500x300" alt="Personagem">
+        </div>
+        <h2>Você gostaria de ouvir nossa música?</h2>
+        <div class="options">
+            <button class="btn" onclick="showPage(3)">Yes ❤</button>
+            <button class="btn" onclick="showPage(3)">No 😡</button>
+        </div>
+    </div>
+
+    <!-- Página 3 -->
+    <div class="page" id="page3">
+        <h2>Te dedico cada verso dessa linda canção</h2>
+        <div class="spotify-embed">
+            <iframe id="spotify-iframe" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+        <button class="btn" onclick="showPage(4)">Clique aqui para continuar</button>
+    </div>
+
+    <!-- Página 4 -->
+    <div class="page" id="page4">
+        <div class="photo-container">
+            <img id="couple-photo" src="https://via.placeholder.com/500x300" alt="Foto do casal">
+        </div>
+        <p id="declaration">
+            Cada momento ao seu lado é especial. Você ilumina meus dias e faz meu coração bater mais forte. Obrigado(a) por compartilhar sua vida comigo e por me fazer tão feliz. Te amo infinitamente!
+        </p>
+        <button class="btn" onclick="showPage(5)">Clique para continuar</button>
+    </div>
+
+    <!-- Página 5 -->
+    <div class="page" id="page5">
+        <div class="photo-container">
+            <img id="character-photo2" src="https://via.placeholder.com/500x300" alt="Personagem">
+        </div>
+        <h2>Você gostaria de ver a quanto tempo estamos juntos?</h2>
+        <div class="options">
+            <button class="btn" onclick="showPage(6)">Yes 🥰</button>
+            <button class="btn" onclick="showPage(6)">No 🥺</button>
+        </div>
+    </div>
+
+    <!-- Página 6 -->
+    <div class="page" id="page6">
+        <h2>Estamos juntos há:</h2>
+        <div class="timer">
+            <div id="years">0 anos</div>
+            <div id="months">0 meses</div>
+            <div id="weeks">0 semanas</div>
+            <div id="days">0 dias</div>
+            <div id="hours">0 horas</div>
+            <div id="minutes">0 minutos</div>
+            <div id="seconds">0 segundos</div>
+        </div>
+        <button class="btn" onclick="showPage(7)">Clique aqui para continuar</button>
+    </div>
+
+    <!-- Página 7 -->
+    <div class="page" id="page7">
+        <h2>Veja agora uma declaração especial!</h2>
+        <button class="btn" onclick="showPage(8)">Clique para ver coração</button>
+    </div>
+
+    <!-- Página 8 (Nova página com o coração Python) -->
+    <div class="page" id="page8">
+        <h2>Assim como esse coração, meu amor por você aumenta a cada dia!</h2>
+        <div class="heart-animation-container" style="box-shadow: none;">
+            <iframe id="python-heart" src="heart2.html" width="100%" height="100%" frameborder="0" style="box-shadow: none;"></iframe>
+        </div>
+        <button class="btn" onclick="showPage(1)">Voltar ao início</button>
+    </div>
+
+    <script>
+        // Variáveis globais
+        let relationshipStartDate = new Date(2022, 0, 1); // Padrão: 1 de janeiro de 2022
+
+        // Função para mostrar uma página específica
+        function showPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('page' + pageNumber).classList.add('active');
+            
+            // Se for a página do coração, recarregar o iframe para garantir que a animação comece
+            if (pageNumber === 8) {
+                const heartFrame = document.getElementById('python-heart');
+                heartFrame.src = heartFrame.src;
+            }
+        }
+
+        // Função para pré-visualizar imagem
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Função para carregar e salvar imagem no localStorage
+        function loadAndSaveImage(input, imageId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    // Salvar a imagem no localStorage
+                    try {
+                        localStorage.setItem('love_' + imageId, imageData);
+                        // Exibir a imagem
+                        document.getElementById(imageId).src = imageData;
+                    } catch (error) {
+                        // Se o localStorage estiver cheio, tente usar uma versão comprimida da imagem
+                        console.error("Erro ao salvar imagem: ", error);
+                        alert("A imagem é muito grande para ser salva localmente. Tente uma imagem menor.");
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Função para carregar imagens do localStorage
+        function loadImagesFromStorage() {
+            const imageIds = ['character-photo1', 'couple-photo', 'character-photo2'];
+            
+            imageIds.forEach(id => {
+                const savedImage = localStorage.getItem('love_' + id);
+                if (savedImage) {
+                    document.getElementById(id).src = savedImage;
+                    
+                    // Também atualizar as pré-visualizações nas configurações
+                    const previewId = id === 'character-photo1' ? 'preview1' : 
+                                     id === 'couple-photo' ? 'preview2' : 'preview3';
+                    if (document.getElementById(previewId)) {
+                        document.getElementById(previewId).src = savedImage;
+                    }
+                }
+            });
+        }
+
+        // Função para mostrar/esconder painel de configurações
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            } else {
+                panel.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                // Carregar valores atuais nos campos
+                loadCurrentSettingsToForm();
+            }
+        }
+
+        // Função para carregar configurações atuais no formulário
+        function loadCurrentSettingsToForm() {
+            // Carregar URL do Spotify
+            const spotifyUrl = localStorage.getItem('love_spotify_url');
+            if (spotifyUrl) {
+                document.getElementById('spotify-url').value = spotifyUrl;
+            }
+
+            // Carregar data de início do relacionamento
+            const dateInput = localStorage.getItem('love_relationship_date');
+            if (dateInput) {
+                document.getElementById('relationship-date').value = dateInput;
+            }
+
+            // Carregar texto da declaração
+            const declarationText = localStorage.getItem('love_declaration');
+            if (declarationText) {
+                document.getElementById('declaration-text').value = declarationText;
+            }
+        }
+
+        // Função para salvar configurações
+        function saveSettings() {
+            // Salvar URL do Spotify
+            const spotifyUrl = document.getElementById('spotify-url').value;
+            if (spotifyUrl) {
+                document.getElementById('spotify-iframe').src = spotifyUrl;
+                localStorage.setItem('love_spotify_url', spotifyUrl);
+            }
+
+            // Salvar data de início do relacionamento
+            const dateInput = document.getElementById('relationship-date').value;
+            if (dateInput) {
+                relationshipStartDate = new Date(dateInput);
+                localStorage.setItem('love_relationship_date', dateInput);
+            }
+
+            // Salvar texto da declaração
+            const declarationText = document.getElementById('declaration-text').value;
+            if (declarationText) {
+                document.getElementById('declaration').textContent = declarationText;
+                localStorage.setItem('love_declaration', declarationText);
+            }
+
+            // Atualizar link de compartilhamento
+            updateShareLink();
+
+            // Fechar painel
+            toggleSettings();
+            
+            // Mostrar confirmação
+            alert("Configurações salvas com sucesso!");
+        }
+
+        // Função para carregar configurações do localStorage
+        function loadSettingsFromStorage() {
+            // Carregar URL do Spotify
+            const spotifyUrl = localStorage.getItem('love_spotify_url');
+            if (spotifyUrl) {
+                document.getElementById('spotify-iframe').src = spotifyUrl;
+            }
+
+            // Carregar data de início do relacionamento
+            const dateInput = localStorage.getItem('love_relationship_date');
+            if (dateInput) {
+                relationshipStartDate = new Date(dateInput);
+            }
+
+            // Carregar texto da declaração
+            const declarationText = localStorage.getItem('love_declaration');
+            if (declarationText) {
+                document.getElementById('declaration').textContent = declarationText;
+            }
+        }
+
+        // Criar estrelas de fundo
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 200;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // Tamanho aleatório para as estrelas
+                const size = Math.random() * 3;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+
+                // Posição aleatória
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+
+                // Brilho aleatório
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Criar meteoros
+        function createMeteors() {
+            setInterval(() => {
+                const meteor = document.createElement('div');
+                meteor.classList.add('meteor');
+
+                // Posição inicial aleatória
+                const startX = Math.random() * window.innerWidth + window.innerWidth/2;
+                const startY = Math.random() * window.innerHeight/2;
+                meteor.style.left = startX + 'px';
+                meteor.style.top = startY + 'px';
+
+                // Tamanho aleatório
+                const size = Math.random() * 150 + 50;
+                meteor.style.width = size + 'px';
+
+                // Duração aleatória
+                const duration = Math.random() * 2 + 1;
+                meteor.style.animationDuration = duration + 's';
+
+                document.body.appendChild(meteor);
+
+                // Remover o meteoro após a animação
+                setTimeout(() => {
+                    meteor.remove();
+                }, duration * 1000);
+            }, 1000);
+        }
+
+        // Calcular tempo de namoro
+        function calculateRelationshipTime() {
+            function updateTimer() {
+                const now = new Date();
+                const diff = now - relationshipStartDate;
+
+                // Cálculo básico de todas as unidades
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                const months = Math.floor(days / 30.44); // Média de dias por mês
+                const years = Math.floor(days / 365.25); // Considerando anos bissextos
+
+                // Cálculo correto dos valores restantes
+                const remainingMonths = Math.floor(months % 12);
+                const totalDaysInMonths = years * 365.25 + remainingMonths * 30.44;
+                const remainingDays = Math.floor(days - totalDaysInMonths);
+                const remainingWeeks = Math.floor(remainingDays / 7);
+                const remainingDaysAfterWeeks = remainingDays % 7;
+                const remainingHours = hours % 24;
+                const remainingMinutes = minutes % 60;
+                const remainingSeconds = seconds % 60;
+
+                document.getElementById('years').textContent = years + (years === 1 ? ' ano' : ' anos');
+                document.getElementById('months').textContent = remainingMonths + (remainingMonths === 1 ? ' mês' : ' meses');
+                document.getElementById('weeks').textContent = remainingWeeks + (remainingWeeks === 1 ? ' semana' : ' semanas');
+                document.getElementById('days').textContent = remainingDaysAfterWeeks + (remainingDaysAfterWeeks === 1 ? ' dia' : ' dias');
+                document.getElementById('hours').textContent = remainingHours + (remainingHours === 1 ? ' hora' : ' horas');
+                document.getElementById('minutes').textContent = remainingMinutes + ' min';
+                document.getElementById('seconds').textContent = remainingSeconds + (remainingSeconds === 1 ? ' segundo' : ' segundos');
+            }
+
+            // Atualizar a cada segundo
+            setInterval(updateTimer, 1000);
+            updateTimer(); // Iniciar imediatamente
+        }
+
+        // Verificar se o localStorage está disponível
+        function checkLocalStorage() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return true;
+            } catch (e) {
+                alert("Seu navegador não suporta armazenamento local ou está em modo privado. Algumas funcionalidades podem não funcionar corretamente.");
+                return false;
+            }
+        }
+
+        // NOVAS FUNÇÕES PARA EXPORTAR/IMPORTAR CONFIGURAÇÕES
+
+        // Função para exportar configurações como arquivo JSON
+        function exportSettings() {
+            // Coletar todas as configurações
+            const settings = {
+                spotify_url: localStorage.getItem('love_spotify_url') || '',
+                relationship_date: localStorage.getItem('love_relationship_date') || '',
+                declaration: localStorage.getItem('love_declaration') || '',
+                images: {
+                    character_photo1: localStorage.getItem('love_character-photo1') || '',
+                    couple_photo: localStorage.getItem('love_couple-photo') || '',
+                    character_photo2: localStorage.getItem('love_character-photo2') || ''
+                }
+            };
+
+            // Converter para JSON
+            const settingsJSON = JSON.stringify(settings);
+            
+            // Criar blob e link para download
+            const blob = new Blob([settingsJSON], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            // Criar link de download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'declaracao_amor_config.json';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpar
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+
+        // Função para importar configurações de um arquivo JSON
+        function importSettings(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const settings = JSON.parse(e.target.result);
+                        
+                        // Aplicar configurações
+                        if (settings.spotify_url) {
+                            localStorage.setItem('love_spotify_url', settings.spotify_url);
+                            document.getElementById('spotify-url').value = settings.spotify_url;
+                            document.getElementById('spotify-iframe').src = settings.spotify_url;
+                        }
+                        
+                        if (settings.relationship_date) {
+                            localStorage.setItem('love_relationship_date', settings.relationship_date);
+                            document.getElementById('relationship-date').value = settings.relationship_date;
+                            relationshipStartDate = new Date(settings.relationship_date);
+                        }
+                        
+                        if (settings.declaration) {
+                            localStorage.setItem('love_declaration', settings.declaration);
+                            document.getElementById('declaration-text').value = settings.declaration;
+                            document.getElementById('declaration').textContent = settings.declaration;
+                        }
+                        
+                        // Importar imagens
+                        if (settings.images) {
+                            if (settings.images.character_photo1) {
+                                localStorage.setItem('love_character-photo1', settings.images.character_photo1);
+                                document.getElementById('character-photo1').src = settings.images.character_photo1;
+                                document.getElementById('preview1').src = settings.images.character_photo1;
+                            }
+                            
+                            if (settings.images.couple_photo) {
+                                localStorage.setItem('love_couple-photo', settings.images.couple_photo);
+                                document.getElementById('couple-photo').src = settings.images.couple_photo;
+                                document.getElementById('preview2').src = settings.images.couple_photo;
+                            }
+                            
+                            if (settings.images.character_photo2) {
+                                localStorage.setItem('love_character-photo2', settings.images.character_photo2);
+                                document.getElementById('character-photo2').src = settings.images.character_photo2;
+                                document.getElementById('preview3').src = settings.images.character_photo2;
+                            }
+                        }
+                        
+                        alert("Configurações importadas com sucesso!");
+                        
+                        // Atualizar link de compartilhamento
+                        updateShareLink();
+                        
+                    } catch (error) {
+                        console.error("Erro ao importar configurações:", error);
+                        alert("Erro ao importar configurações. Verifique se o arquivo é válido.");
+                    }
+                };
+                
+                reader.readAsText(input.files[0]);
+            }
+        }
+
+        // Função para gerar QR Code com as configurações
+        function generateQRCode() {
+            // Obter link de compartilhamento
+            const shareUrl = document.getElementById('share-url').value;
+            
+            if (!shareUrl) {
+                updateShareLink();
+            }
+            
+            // Limpar QR code anterior
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // Gerar novo QR code
+            QRCode.toCanvas(document.getElementById('qrcode'), shareUrl || window.location.href, {
+                width: 200,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#ffffff'
+                }
+            }, function(error) {
+                if (error) {
+                    console.error('Erro ao gerar QR code:', error);
+                    alert('Erro ao gerar QR code. Tente novamente.');
+                } else {
+                    // Mostrar container do QR code
+                    document.getElementById('qr-code-container').style.display = 'block';
+                }
+            });
+        }
+
+        // Função para atualizar o link de compartilhamento
+        function updateShareLink() {
+            // Coletar configurações básicas (sem imagens para URL não ficar muito grande)
+            const settings = {
+                s: localStorage.getItem('love_spotify_url') || '',
+                d: localStorage.getItem('love_relationship_date') || '',
+                t: localStorage.getItem('love_declaration') || ''
+            };
+            
+            // Converter para Base64 para encurtar a URL
+            const encodedSettings = btoa(JSON.stringify(settings));
+            
+            // Criar URL com parâmetros
+            const url = new URL(window.location.href);
+            url.search = ''; // Limpar parâmetros existentes
+            url.hash = encodedSettings;
+            
+            // Atualizar campo de texto
+            document.getElementById('share-url').value = url.toString();
+        }
+
+        // Função para copiar link de compartilhamento
+        function copyShareLink() {
+            const shareUrl = document.getElementById('share-url');
+            shareUrl.select();
+            document.execCommand('copy');
+            alert('Link copiado para a área de transferência!');
+        }
+
+        // Função para carregar configurações da URL
+        function loadSettingsFromUrl() {
+            if (window.location.hash) {
+                try {
+                    // Decodificar configurações da URL
+                    const encodedSettings = window.location.hash.substring(1);
+                    const settings = JSON.parse(atob(encodedSettings));
+                    
+                    // Aplicar configurações
+                    if (settings.s) {
+                        localStorage.setItem('love_spotify_url', settings.s);
+                        document.getElementById('spotify-iframe').src = settings.s;
+                    }
+                    
+                    if (settings.d) {
+                        localStorage.setItem('love_relationship_date', settings.d);
+                        relationshipStartDate = new Date(settings.d);
+                    }
+                    
+                    if (settings.t) {
+                        localStorage.setItem('love_declaration', settings.t);
+                        document.getElementById('declaration').textContent = settings.t;
+                    }
+                    
+                    // Atualizar formulário se estiver aberto
+                    if (document.getElementById('settings-panel').style.display === 'block') {
+                        loadCurrentSettingsToForm();
+                    }
+                    
+                } catch (error) {
+                    console.error("Erro ao carregar configurações da URL:", error);
+                }
+            }
+        }
+
+        // Inicializar tudo quando a página carregar
+        window.onload = function() {
+            // Verificar se o localStorage está disponível
+            if (checkLocalStorage()) {
+                // Carregar configurações da URL (se existirem)
+                loadSettingsFromUrl();
+                
+                // Carregar configurações salvas
+                loadSettingsFromStorage();
+                
+                // Carregar imagens salvas
+                loadImagesFromStorage();
+                
+                // Atualizar link de compartilhamento
+                updateShareLink();
+            }
+            
+            createStars();
+            createMeteors();
+            calculateRelationshipTime();
+        };
+    </script>
+</body>
+</html>
+
